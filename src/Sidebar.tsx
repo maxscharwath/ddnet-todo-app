@@ -51,7 +51,7 @@ export const Sidebar: FC = () => {
         </span>
       </h1>
       <ScrollArea.Root className="flex flex-1 overflow-hidden">
-        <ScrollArea.Viewport>
+        <ScrollArea.Viewport className="flex-1">
           <ul className="grid gap-2">
             {orderedLists.map(list => (
               <ListItem key={list.id} list={list}/>
