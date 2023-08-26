@@ -16,4 +16,4 @@ export const waitLoggedIn = async () =>
       await client.waitForConnection()
       resolve(data)
     })
-  });
+  })

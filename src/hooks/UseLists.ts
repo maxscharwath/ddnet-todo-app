@@ -12,47 +12,47 @@ export type ListDocumentData = {
 
 export type ListDocument = Document<ListDocumentData>;
 
-async function fetchDocuments() {
-  await waitLoggedIn();
-  return client.listDocumentIds();
+async function fetchDocuments () {
+  await waitLoggedIn()
+  return client.listDocumentIds()
 }
 
 export const useLists = () => {
-  const [documents, setDocuments] = useState<ListDocument[]>([]);
+  const [documents, setDocuments] = useState<ListDocument[]>([])
   const updateDocuments = (docs: ListDocument[]) => {
-    setDocuments(state => Array.from(new Set([...state, ...docs])));
+    setDocuments(state => Array.from(new Set([...state, ...docs])))
   }
   useEffect(() => {
     const unsub = client.on('document-added', (doc) => {
-      updateDocuments([doc as unknown as ListDocument]);
+      updateDocuments([doc as unknown as ListDocument])
     })
 
     fetchDocuments().then(lists =>
       lists.map(async (id) =>
         updateDocuments([await client.requestDocument<ListDocumentData>(id)])))
 
-    return unsub;
-  }, []);
+    return unsub
+  }, [])
 
   useEffect(() => {
     return client.on('document-destroyed', (doc) => {
-      setDocuments(state => state.filter(d => d.id !== doc.id));
+      setDocuments(state => state.filter(d => d.id !== doc.id))
     })
-  }, []);
+  }, [])
 
   return {
     lists: documents,
-    createList() {
-      const document = client.createDocument<ListDocumentData>();
+    createList () {
+      const document = client.createDocument<ListDocumentData>()
       document.change((doc) => {
-        doc.icon = '📝';
-        doc.title = 'Untitled';
-        doc.tasks = [];
-      });
-      return document;
+        doc.icon = '📝'
+        doc.title = 'Untitled'
+        doc.tasks = []
+      })
+      return document
     },
-    deleteList(document: ListDocument) {
-      return client.removeDocument(document.id);
+    deleteList (document: ListDocument) {
+      return client.removeDocument(document.id)
     },
   }
 }

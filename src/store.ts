@@ -1,5 +1,6 @@
 import {
-  DocumentSharingClient, generatePrivateKey,
+  DocumentSharingClient,
+  generatePrivateKey,
   IDBStorageProvider,
   KeyManager,
   SessionManager,
@@ -10,7 +11,7 @@ export const sessionManager = new SessionManager(
   new KeyManager('keys-store'),
 )
 
-const networkAdapter = new WebSocketNetworkAdapter("wss://ddnet-server.fly.dev")
+const networkAdapter = new WebSocketNetworkAdapter('wss://ddnet-server.fly.dev')
 
 export const client = new DocumentSharingClient({
   sessionManager,
@@ -18,14 +19,14 @@ export const client = new DocumentSharingClient({
   storageProvider: new IDBStorageProvider(),
 })
 
-async function init() {
-  const key = (await sessionManager.listKeys())[0];
+async function init () {
+  const key = (await sessionManager.listKeys())[0]
   await sessionManager.login(key, 'password123').catch(async () => {
-    const {base58PublicKey} = await sessionManager.register(generatePrivateKey(), 'password123');
-    console.log(`Registered new key: ${base58PublicKey}`);
-    return sessionManager.login(base58PublicKey, 'password123');
+    const { base58PublicKey } = await sessionManager.register(generatePrivateKey(), 'password123')
+    console.log(`Registered new key: ${base58PublicKey}`)
+    return sessionManager.login(base58PublicKey, 'password123')
   })
-    .then(() => console.log('Logged in'));
+    .then(() => console.log('Logged in'))
 }
 
-void init();
+void init()

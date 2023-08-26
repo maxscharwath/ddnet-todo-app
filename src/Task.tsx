@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 import { clsx } from 'clsx'
+import { AnimatePresence, motion } from 'framer-motion'
 import * as Checkbox from '@radix-ui/react-checkbox'
 
 export interface TaskProps {
@@ -22,24 +23,39 @@ export const Task: FC<TaskProps & TaskEventsProps> = ({ id, text, checked, onTog
       className={clsx(
         'flex-shrink-0 self-start',
         'flex items-center justify-center w-5 h-5 text-transparent border-2 border-gray-300 dark:border-gray-500 rounded-full',
+        'transition-colors duration-200 ease-in-out',
         'radix-state-checked:bg-green-500 radix-state-checked:border-green-500',
         'focus:outline-none'
       )}
       checked={checked}
       onCheckedChange={e => onToggleTask?.(id, e === true)}
     >
-      <Checkbox.Indicator asChild>
-        <svg className="w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-             fill="currentColor">
-          <path fillRule="evenodd"
-                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                clipRule="evenodd"/>
-        </svg>
-      </Checkbox.Indicator>
+      <AnimatePresence>
+        {checked && (
+          <svg
+            className="w-4 h-4 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+          >
+            <motion.path
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              exit={{ pathLength: 0 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              d="M 4.5 11 L 8 14.5 L 16.5 6"
+              fill="transparent"
+              strokeWidth="3"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        )}
+      </AnimatePresence>
     </Checkbox.Root>
     <span className={clsx(
       'ml-4 text-sm',
-      checked && 'line-through text-gray-400 dark:text-gray-500'
+      checked && 'line-through text-gray-500 dark:text-gray-600'
     )}>{text}</span>
   </label>
 )

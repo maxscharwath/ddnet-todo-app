@@ -5,8 +5,8 @@ import { client } from '../store.ts'
 export const useList = (document: ListDocument) => {
   const [list, setList] = useState<ListDocumentData>(document.data)
   useEffect(() => {
-    return document.on('change', ({data}) => {
-      setList({...data})
+    return document.on('change', ({ data }) => {
+      setList({ ...data })
     })
   }, [document])
 
@@ -19,17 +19,17 @@ export const useList = (document: ListDocument) => {
     tasks: list.tasks ?? [],
     totalTasks,
     completedTasks,
-    setIcon(icon: string) {
+    setIcon (icon: string) {
       document.change((doc) => {
-        doc.icon = icon;
+        doc.icon = icon
       })
     },
-    setTitle(title: string) {
+    setTitle (title: string) {
       document.change((doc) => {
-        doc.title = title;
+        doc.title = title
       })
     },
-    addTask(text: string) {
+    addTask (text: string) {
       document.change((doc) => {
         doc.tasks ??= []
         doc.tasks.push({
@@ -38,22 +38,22 @@ export const useList = (document: ListDocument) => {
         })
       })
     },
-    deleteList() {
-      void client.removeDocument(document.id);
+    deleteList () {
+      void client.removeDocument(document.id)
     },
-    removeTask(taskId: string) {
+    removeTask (taskId: string) {
       document.change((doc) => {
-        const index = doc.tasks.findIndex((t) => t.id === taskId);
+        const index = doc.tasks.findIndex((t) => t.id === taskId)
         if (index !== -1) {
-          doc.tasks.splice(index, 1);
+          doc.tasks.splice(index, 1)
         }
       })
     },
-    toggleTask(taskId: string) {
+    toggleTask (taskId: string) {
       document.change((doc) => {
-        const task = doc.tasks.find((t) => t.id === taskId);
+        const task = doc.tasks.find((t) => t.id === taskId)
         if (task) {
-          task.checked = !task.checked;
+          task.checked = !task.checked
         }
       })
     }
