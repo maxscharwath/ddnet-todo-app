@@ -7,7 +7,7 @@ import { MenuDotsIcon } from './components/icons'
 export const Layout: FC = () => {
   const [open, setOpen] = React.useState(false)
   return (
-    <div className="flex items-center justify-center w-screen h-[100dvh] font-medium bg-gray-200 dark:bg-gray-900">
+    <div className="flex items-center justify-center w-screen h-[100dvh] font-medium">
       <Sidebar open={open} setOpen={setOpen}/>
       <div className="flex flex-col w-full h-full">
         <header

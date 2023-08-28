@@ -47,11 +47,16 @@ export const Sidebar: FC<{ open?: boolean, setOpen?: (open: boolean) => void }> 
 
   return (
     <>
+      <div
+        className="sm:hidden fixed inset-0 bg-black/50 data-[state=closed]:opacity-0 transition-opacity duration-200 ease-in-out data-[state=closed]:pointer-events-none"
+        onClick={() => setOpen(false)}
+        data-state={open ? 'open' : 'closed'}
+      />
       <nav
         className={clsx(
           'h-full bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-200 flex flex-col py-4 gap-4 flex-shrink-0',
           'transition-all duration-200 ease-in-out',
-          'fixed top-0 left-0 z-10 shadow-lg w-4/5 data-[state=closed]:-translate-x-full',
+          'fixed top-0 left-0 shadow-lg w-4/5 data-[state=closed]:-translate-x-full',
           'sm:w-64 sm:static sm:data-[state=closed]:translate-x-0 sm:shadow-none',
         )}
         data-state={open ? 'open' : 'closed'}
@@ -82,11 +87,6 @@ export const Sidebar: FC<{ open?: boolean, setOpen?: (open: boolean) => void }> 
           </button>
         </div>
       </nav>
-      <div
-        className="sm:hidden fixed inset-0 bg-black/50 data-[state=closed]:opacity-0 transition-opacity duration-200 ease-in-out data-[state=closed]:pointer-events-none"
-        onClick={() => setOpen(false)}
-        data-state={open ? 'open' : 'closed'}
-      />
     </>
   )
 }
