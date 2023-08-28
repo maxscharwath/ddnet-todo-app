@@ -1,7 +1,7 @@
 import { client } from '../store.ts'
 import { useEffect, useState } from 'react'
 import { type Document } from '@describble/ddnet'
-import { TaskProps } from '../Task.tsx'
+import { TaskProps } from '../components/Task.tsx'
 import { waitLoggedIn } from './UseSession.ts'
 
 export type ListDocumentData = {
@@ -23,15 +23,13 @@ export const useLists = () => {
     setDocuments(state => Array.from(new Set([...state, ...docs])))
   }
   useEffect(() => {
-    const unsub = client.on('document-added', (doc) => {
-      updateDocuments([doc as unknown as ListDocument])
-    })
-
     fetchDocuments().then(lists =>
       lists.map(async (id) =>
         updateDocuments([await client.requestDocument<ListDocumentData>(id)])))
 
-    return unsub
+    return client.on('document-added', (doc) => {
+      updateDocuments([doc as unknown as ListDocument])
+    })
   }, [])
 
   useEffect(() => {

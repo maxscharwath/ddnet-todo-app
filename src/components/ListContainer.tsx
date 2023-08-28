@@ -1,15 +1,15 @@
-import React, { FC, PropsWithChildren, SVGProps, useMemo } from 'react'
+import React, { FC, PropsWithChildren, useMemo } from 'react'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
-import * as ScrollArea from '@radix-ui/react-scroll-area'
 import { NewTaskInput } from './NewTaskInput.tsx'
 import { Task } from './Task.tsx'
 import { clsx } from 'clsx'
 import * as Dialog from '@radix-ui/react-dialog'
 import * as Collapsible from '@radix-ui/react-collapsible'
-import { ListDocument } from './hooks/UseLists.ts'
-import { useList } from './hooks/UseList.ts'
-import { useSession } from './hooks/UseSession.ts'
+import { ListDocument } from '../hooks/UseLists.ts'
+import { useList } from '../hooks/UseList.ts'
+import { useSession } from '../hooks/UseSession.ts'
 import { base58, validatePublicKey } from '@describble/ddnet'
+import { AddUserIcon, ChevronRightIcon, RemoveUserIcon } from './icons'
 
 const ListIcon: FC<{
   icon: string;
@@ -21,7 +21,7 @@ const ListIcon: FC<{
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
         <button
-          className="w-8 h-8 flex items-center justify-center rounded-xl hover:bg-gray-100 hover:dark:bg-gray-700 active:bg-gray-100 data-[state=open]:bg-gray-100 data-[state=open]:dark:bg-gray-700">
+          className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gray-100 hover:dark:bg-gray-700 active:bg-gray-100 data-[state=open]:bg-gray-100 data-[state=open]:dark:bg-gray-700">
           {icon}
         </button>
       </DropdownMenu.Trigger>
@@ -63,7 +63,7 @@ const ListTitle: FC<{
 
   return (
     <div className={clsx(
-      'flex items-center rounded-xl h-8 px-2 hover:bg-gray-100 hover:dark:bg-gray-700 font-semibold text-lg truncate',
+      'flex items-center rounded-xl h-10 px-2 hover:bg-gray-100 hover:dark:bg-gray-700 font-semibold text-xl truncate',
       isEditing && 'bg-gray-100 dark:bg-gray-700 ring-2 ring-indigo-500'
     )} onClick={() => setIsEditing(true)}>
       {isEditing ? (
@@ -172,27 +172,6 @@ const ShareDialog: FC<PropsWithChildren<{
   )
 }
 
-export const AddUserIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}>
-    <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-          d="M15 11h3m0 0h3m-3 0v3m0-3V8m-3 11v-1.25c0-2.071-1.919-3.75-4.286-3.75H7.286C4.919 14 3 15.679 3 17.75V19m9-11a3 3 0 1 1-6 0a3 3 0 0 1 6 0z"></path>
-  </svg>
-)
-
-export const RemoveUserIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}>
-    <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-          d="M16 11h6m-6 8v-1.25c0-2.071-1.919-3.75-4.286-3.75H8.286C5.919 14 4 15.679 4 17.75V19m9-11a3 3 0 1 1-6 0a3 3 0 0 1 6 0z"></path>
-  </svg>
-)
-
-export const ChevronRightIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}>
-    <path fill="currentColor"
-          d="M9.29 6.71a.996.996 0 0 0 0 1.41L13.17 12l-3.88 3.88a.996.996 0 1 0 1.41 1.41l4.59-4.59a.996.996 0 0 0 0-1.41L10.7 6.7c-.38-.38-1.02-.38-1.41.01z"></path>
-  </svg>
-)
-
 export const ListContainer: FC<{ list: ListDocument }> = ({ list }) => {
   const { icon, title, tasks, addTask, toggleTask, setIcon, setTitle } = useList(list)
 
@@ -208,60 +187,57 @@ export const ListContainer: FC<{ list: ListDocument }> = ({ list }) => {
 
   return (
     <div
-      className="flex flex-col w-full h-full p-2 sm:p-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg text-gray-600 dark:text-gray-200 gap-4">
-      <div className="flex items-center gap-2">
+      className="flex flex-col w-full h-full py-2 sm:py-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg text-gray-600 dark:text-gray-200 gap-4">
+      <div className="flex items-center gap-2 px-2 sm:px-6">
         <ListIcon icon={icon} onUpdateIcon={setIcon}/>
         <ListTitle title={title} onUpdateTitle={setTitle}/>
         <div className="flex-grow"/>
         <ShareDialog document={list}>
           <button
-            className="w-8 h-8 flex items-center justify-center rounded-xl hover:bg-gray-100 hover:dark:bg-gray-700 active:bg-gray-100 data-[state=open]:bg-gray-100 data-[state=open]:dark:bg-gray-700">
-            <AddUserIcon/>
+            className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gray-100 hover:dark:bg-gray-700 active:bg-gray-100 data-[state=open]:bg-gray-100 data-[state=open]:dark:bg-gray-700">
+            <AddUserIcon className="w-6 h-6"/>
           </button>
         </ShareDialog>
       </div>
-      <ScrollArea.Root className="flex flex-1 overflow-hidden">
-        <ScrollArea.Viewport className="flex-1">
-          <Collapsible.Root open={open} onOpenChange={setOpen} className="flex flex-col gap-4">
-            <div className="flex gap-1 flex-col">
-              {tasksUndone.map(task => (
-                <Task key={task.id} {...task} onToggleTask={toggleTask}/>
-              ))}
-            </div>
-            {tasksDone.length > 0 && (
-              <>
-                <Collapsible.Trigger asChild>
-                  <button
-                    className="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 rounded-md px-2 h-10 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer">
-                    <ChevronRightIcon className={clsx(
-                      'transform transition-transform',
-                      open && 'rotate-90'
-                    )}/>
-                    <span className="text-sm font-medium">Completed</span>
-                    <span className="text-xs bg-gray-100 dark:bg-gray-600 rounded-full px-2 py-0.5">
+      <div className="flex-1 overflow-y-auto px-2 sm:px-6">
+        <Collapsible.Root open={open} onOpenChange={setOpen} className="flex flex-col gap-4">
+          <div className="flex gap-1 flex-col">
+            {tasksUndone.map(task => (
+              <Task key={task.id} {...task} onToggleTask={toggleTask}/>
+            ))}
+          </div>
+          {tasksDone.length > 0 && (
+            <>
+              <Collapsible.Trigger asChild>
+                <button
+                  className={clsx(
+                    'flex items-center gap-2 bg-gray-100 dark:bg-gray-700 rounded-md p-2 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer truncate',
+                    'text-xl sm:text-base'
+                  )}>
+                  <ChevronRightIcon className={clsx(
+                    'transform transition-transform flex-shrink-0 w-7 h-7',
+                    open && 'rotate-90'
+                  )}/>
+                  <span className="font-medium truncate">Completed</span>
+                  <span className="text-xs bg-gray-100 dark:bg-gray-600 rounded-full px-2 py-0.5">
                     {tasksDone.length}
                   </span>
-                  </button>
-                </Collapsible.Trigger>
-                <Collapsible.Content>
-                  <div className="flex gap-1 flex-col">
-                    {tasksDone.map(task => (
-                      <Task key={task.id} {...task} onToggleTask={toggleTask}/>
-                    ))}
-                  </div>
-                </Collapsible.Content>
-              </>
-            )}
-          </Collapsible.Root>
-        </ScrollArea.Viewport>
-        <ScrollArea.Scrollbar
-          className="flex select-none touch-none w-2"
-          orientation="vertical"
-        >
-          <ScrollArea.Thumb className="flex-1 rounded-full bg-gray-400 dark:bg-gray-600"/>
-        </ScrollArea.Scrollbar>
-      </ScrollArea.Root>
-      <NewTaskInput onAddTask={addTask}/>
+                </button>
+              </Collapsible.Trigger>
+              <Collapsible.Content>
+                <div className="flex gap-1 flex-col">
+                  {tasksDone.map(task => (
+                    <Task key={task.id} {...task} onToggleTask={toggleTask}/>
+                  ))}
+                </div>
+              </Collapsible.Content>
+            </>
+          )}
+        </Collapsible.Root>
+      </div>
+      <div className="px-2 sm:px-6">
+        <NewTaskInput onAddTask={addTask}/>
+      </div>
     </div>
   )
 }

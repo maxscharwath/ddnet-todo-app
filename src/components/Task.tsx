@@ -17,12 +17,14 @@ export const Task: FC<TaskProps & TaskEventsProps> = ({ id, text, checked, onTog
   <label className={clsx(
     'flex items-center p-3 rounded-md cursor-pointer bg-gray-100/50 dark:bg-gray-900/50',
     'hover:bg-gray-100 dark:hover:bg-gray-900',
-    'focus-within:bg-gray-100 dark:focus-within:bg-gray-900'
+    'focus-within:bg-gray-100 dark:focus-within:bg-gray-900',
+    'text-xl sm:text-base',
   )}>
     <Checkbox.Root
       className={clsx(
         'flex-shrink-0 self-start',
-        'flex items-center justify-center w-5 h-5 text-transparent border-2 border-gray-300 dark:border-gray-500 rounded-full',
+        'w-7 h-7 sm:w-5 sm:h-5 transition-all',
+        'flex items-center justify-center text-transparent border-2 border-gray-300 dark:border-gray-500 rounded-full',
         'transition-colors duration-200 ease-in-out',
         'radix-state-checked:bg-green-500 radix-state-checked:border-green-500',
         'focus:outline-none'
@@ -33,7 +35,7 @@ export const Task: FC<TaskProps & TaskEventsProps> = ({ id, text, checked, onTog
       <AnimatePresence>
         {checked && (
           <svg
-            className="w-4 h-4 text-white"
+            className="text-white"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
           >
@@ -54,7 +56,7 @@ export const Task: FC<TaskProps & TaskEventsProps> = ({ id, text, checked, onTog
       </AnimatePresence>
     </Checkbox.Root>
     <span className={clsx(
-      'ml-4 text-sm',
+      'ml-4 overflow-ellipsis overflow-hidden',
       checked && 'line-through text-gray-500 dark:text-gray-600'
     )}>{text}</span>
   </label>
